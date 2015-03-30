@@ -31,7 +31,7 @@ void Manga::initClass(QNetworkReply *reply)
     findName.indexIn(data);
     this->name = findName.cap(1);
     // Парсим автора манги
-    QRegExp findAuthor = QRegExp("<span class=\"elem_author \"> <a href=\"/list/author/([a-z, _]+)\" class=\"element-link\">([a-z, A-Z, 0-9, А-Я, а-я]+)</a><a class='screenshot'");
+    QRegExp findAuthor = QRegExp("<span class=\"elem_author \"> <a href=\"/list/person/([a-z, _]+)\" class=\"person-link\">([a-z, A-Z, 0-9, А-Я, а-я]+)</a><a class='screenshot'");
     findAuthor.indexIn(data);
     this->author = findAuthor.cap(2);
     // Парсим nickname манги и сайт с мангой
@@ -40,7 +40,7 @@ void Manga::initClass(QNetworkReply *reply)
     url = findUrl.cap(2);
     site = findUrl.cap(1);
     // Парсим главы манги
-    QRegExp findChapters("<table class=\"cTable\" id=\"chapters-list\">(.*)</table>");
+    QRegExp findChapters("<table class=\"table table-hover\" id=\"chapters-list\">(.*)</table>");
     findChapters.indexIn(data);
     QString chaptersString = findChapters.cap(1);
     QStringList chaptersList = chaptersString.split("</tr>");
