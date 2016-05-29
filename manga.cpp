@@ -40,29 +40,28 @@ void Manga::initClass(QNetworkReply *reply)
     url = findUrl.cap(2);
     site = findUrl.cap(1);
     // Парсим главы манги
-    QRegExp findChapters("<table class=\"table table-hover\" id=\"chapters-list\">(.*)</table>");
-    findChapters.indexIn(data);
-    QString chaptersString = findChapters.cap(1);
-    QStringList chaptersList = chaptersString.split("</tr>");
-    QRegExp findChapterUrl = QRegExp("<a href=\"([a-z, 0-9, _, //]+)\" title=\"\">");
-    // Считаем количество глав
-    foreach(QString chapterString, chaptersList)
-    {
-        findChapterUrl.indexIn(chapterString);
-        if (findChapterUrl.cap(1).length() > 0)
+        QRegExp findChapters("<table class=\"table table-hover\" id=\"chapters-list\">(.*)</table>");
+        findChapters.indexIn(data);
+        QString chaptersString = findChapters.cap(1);
+        QStringList chaptersList = chaptersString.split("</tr>");
+        QRegExp findChapterUrl = QRegExp("<a href=\"([a-z, 0-9, _, //]+)\" title=\"\">");
+        // Считаем количество глав
+        foreach(QString chapterString, chaptersList)
         {
-            this->setChaptersCount();
+            findChapterUrl.indexIn(chapterString);
+            if (findChapterUrl.cap(1).length() > 0)
+            {
+                this->setChaptersCount();
+            }
         }
-    }
 
-    foreach(QString chapterString, chaptersList)
-    {
-        findChapterUrl.indexIn(chapterString);
-        if (findChapterUrl.cap(1).length() > 0)
+        foreach(QString chapterString, chaptersList)
         {
-            WebChapter* ch = new WebChapter(this->parent(), QString("http://" + site + findChapterUrl.cap(1)));
+            findChapterUrl.indexIn(chapterString);
+            if (findChapterUrl.cap(1).length() > 0)
+            {
+                WebChapter* ch = new WebChapter(this->parent(), QString("http://" + site + findChapterUrl.cap(1)));
+            }
         }
+        this->initFinished();
     }
-    this->initFinished();
-}
-
